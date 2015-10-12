@@ -1,14 +1,16 @@
 // Enemies our player must avoid
 var Enemy = function(row, speed) {
     /*
-    Class function for the enemies, using the pseudoclassical model
-    Takes two parameters, row and speed;
-     */
+    * Class function for the enemies, using the pseudoclassical model
+    * Takes two parameters, row and speed;
+    * Row is used to determin the position on the y axis, as enemies can only be
+    * in row 1 to 3.
+    */
     this.sprite = 'images/enemy-bug.png';
     this.x = 0;
     this.y = row * 83;
     this.speed = speed;
-    
+
 };
 
 // Update the enemy's position, required method for game
