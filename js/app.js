@@ -66,15 +66,18 @@ Player.prototype.handleInput = function(key) {
     }
   }
 };
-Player.prototype.checkCollisions= function() {
-  for (var index in allEnemies) {
-    var en = allEnemies[index];
-    if (en.x < this.x && this.x < en.x + 101 &&
-        en.y < this.y && this.y < en.y + 83
-      ) {
+Player.prototype.checkCollisions = function() {
+  for (var i = 0; i < allEnemies.length; i++) {
+    var en = allEnemies[i];
+    if (
+      (en.x < this.x && this.x < (en.x + 80) ||
+        en.x < this.x + 80 && this.x < en.x) &&
+      (en.y - 30 <= this.y && this.y <= en.y + 30)
+    ) {
+      console.log('collision', this.y, en.y);
       this.x = this.startingX;
       this.y = this.startingY;
-      break;
+      this.lives -= 1;
     }
   }
 };

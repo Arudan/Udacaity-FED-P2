@@ -153,6 +153,9 @@ var Engine = (function(global) {
         });
 
         player.render();
+        for (var i = 0; i < player.lives; i++){
+          ctx.drawImage(Resources.get('images/Heart.png'), i * 50 + 5, 42, 50, 70);
+        }
     }
 
     /* This function does nothing but it could have been a good place to
@@ -172,7 +175,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 
