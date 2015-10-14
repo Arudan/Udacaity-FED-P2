@@ -34,11 +34,15 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 var Player = function() {
   this.sprite = 'images/char-boy.png';
-  this.x = 202;
-  this.y = 402;
+  this.startingX = 202;
+  this.startingY = 402;
+  this.x = this.startingX;
+  this.y = this.startingY;
+  this.lives = 3;
 };
 Player.prototype.update = function(dt) {
   this.render();
+  this.checkCollisions();
 };
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -59,6 +63,18 @@ Player.prototype.handleInput = function(key) {
   } else if (key === 'down') {
     if (this.y < 400) {
       this.y += 83;
+    }
+  }
+};
+Player.prototype.checkCollisions= function() {
+  for (var index in allEnemies) {
+    var en = allEnemies[index];
+    if (en.x < this.x && this.x < en.x + 101 &&
+        en.y < this.y && this.y < en.y + 83
+      ) {
+      this.x = this.startingX;
+      this.y = this.startingY;
+      break;
     }
   }
 };
