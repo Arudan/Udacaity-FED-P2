@@ -1,13 +1,13 @@
-var gameReset = function(){
+var gameInit = function(){
   this.level = 1;
   this.allEnemies = enemyGenerator();
   this.player = new Player();
 };
 
 var nextLevel = function() {
-  this.level++;
-  this.allEnemies = enemyGenerator();
-  this.player.resetPosition();
+  level++;
+  allEnemies = enemyGenerator();
+  player.resetPosition();
 };
 
 var enemyGenerator = function() {
@@ -40,4 +40,4 @@ document.addEventListener('keyup', function(e) {
 });
 
 //Initialize game
-gameReset();
+gameInit();

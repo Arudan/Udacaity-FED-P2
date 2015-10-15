@@ -13,6 +13,7 @@ Player.prototype.update = function(dt) {
   if (this.lives > 0) {
     this.render();
     this.checkCollisions();
+    this.checkDeath();
     this.checkVictory();
   }
 };
@@ -55,11 +56,14 @@ Player.prototype.checkCollisions = function() {
     }
   }
 };
+Player.prototype.checkDeath = function() {
+  if (this.lives <= 0){
+    gameInit();
+  }
+};
 Player.prototype.checkVictory = function() {
-  if (this.lives > 0){
-    if (this.y < 50) {
-      nextLevel();
-    }
+  if (this.y < 50) {
+    nextLevel();
   }
 };
 Player.prototype.resetPosition = function() {
