@@ -1,102 +1,30 @@
-// Enemies our player must avoid
-var Enemy = function(column, row, speed) {
-  /*
-   * Class function for the enemies, using the pseudoclassical model
-   * Takes three parameters, y, x and speed;
-   * y is an integer number between 1 and 3. It is used to determin the
-   * position on the y axis, as enemies can only be in row 1 to 3.
-   * x determins the position on the x axis; It's an integer number which gets
-   * multiplied by the number of pixel of the sprite width
-   */
-  this.sprite = 'images/enemy-bug.png';
-  this.x = (column * 101);
-  this.y = (row * 70);
-  this.speed = speed;
+var gameReset = function(){
+  this.level = 1;
+  this.allEnemies = enemyGenerator();
+  this.player = new Player();
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-  this.x += (speed * dt);
-  if (this.x > 606) {
-    this.x = -101;
-  }
-  this.render();
+var nextLevel = function() {
+  this.level++;
+  this.allEnemies = enemyGenerator();
+  this.player.resetPosition();
 };
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-var Player = function() {
-  this.sprite = 'images/char-boy.png';
-  this.startingX = 202;
-  this.startingY = 402;
-  this.x = this.startingX;
-  this.y = this.startingY;
-  this.lives = 3;
-};
-Player.prototype.update = function(dt) {
-  this.render();
-  this.checkCollisions();
-};
-Player.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-Player.prototype.handleInput = function(key) {
-  if (key === 'up') {
-    if (this.y > 0){
-      this.y += -83;
-    }
-  } else if (key === 'left') {
-    if (this.x >= 101) {
-      this.x += -101;
-    }
-  } else if (key === 'right') {
-    if (this.x < 404) {
-      this.x += 101;
-    }
-  } else if (key === 'down') {
-    if (this.y < 400) {
-      this.y += 83;
-    }
-  }
-};
-Player.prototype.checkCollisions = function() {
-  for (var i = 0; i < allEnemies.length; i++) {
-    var en = allEnemies[i];
-    if (
-      (en.x < this.x && this.x < (en.x + 80) ||
-        en.x < this.x + 80 && this.x < en.x) &&
-      (en.y - 30 <= this.y && this.y <= en.y + 30)
-    ) {
-      this.lives -= 1;
-      this.x = this.startingX;
-      this.y = this.startingY;
-    }
-  }
-};
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-var enemyGenerator = function(n) {
+var enemyGenerator = function() {
   var enemyList = [];
-  for (var i = 0; i <= n; i++) {
+  var n = level * 2;
+  for (var i = 0; i < n; i++) {
     row = Math.floor(Math.random() * 3) + 1;
     column = Math.floor(Math.random() * 5) - 1;
-    speed = Math.floor(Math.random() * 30) + 20;
+    speed = Math.floor(Math.random() * 30 * level) + 20 * level;
     var enemy = new Enemy(column, row, speed);
     enemyList.push(enemy);
   }
   return enemyList;
 };
+// var level is used to increse the game difficulty at every victory.
+// Gets incremented at every level
 
-var allEnemies = enemyGenerator(3);
-var player = new Player();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -110,3 +38,6 @@ document.addEventListener('keyup', function(e) {
 
   player.handleInput(allowedKeys[e.keyCode]);
 });
+
+//Initialize game
+gameReset();
