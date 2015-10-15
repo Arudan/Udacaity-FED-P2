@@ -74,10 +74,9 @@ Player.prototype.checkCollisions = function() {
         en.x < this.x + 80 && this.x < en.x) &&
       (en.y - 30 <= this.y && this.y <= en.y + 30)
     ) {
-      console.log('collision', this.y, en.y);
+      this.lives -= 1;
       this.x = this.startingX;
       this.y = this.startingY;
-      this.lives -= 1;
     }
   }
 };
