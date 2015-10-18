@@ -24,22 +24,27 @@ Player.prototype.render = function() {
 };
 Player.prototype.handleInput = function(key) {
   if (this.lives > 0) {
-    if (key === 'up') {
-      if (this.y > 0){
-        this.y += -83;
-      }
-    } else if (key === 'left') {
-      if (this.x >= 101) {
-        this.x += -101;
-      }
-    } else if (key === 'right') {
-      if (this.x < 404) {
-        this.x += 101;
-      }
-    } else if (key === 'down') {
-      if (this.y < 400) {
-        this.y += 83;
-      }
+    switch (key) {
+      case 'up':
+        if (this.y > 0) {
+          this.y += -83;
+        }
+        break;
+      case 'left':
+        if (this.x >= 101) {
+          this.x += -101;
+        }
+        break;
+      case 'right':
+        if (this.x < 404) {
+          this.x += 101;
+        }
+        break;
+      case 'down':
+        if (this.y < 400) {
+          this.y += 83;
+        }
+        break;
     }
   }
 };
@@ -92,7 +97,7 @@ var Enemy = function(column, row, speed) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-  this.x += (speed * dt);
+  this.x += this.speed * dt;
   if (this.x > 606) {
     this.x = -101;
   }
