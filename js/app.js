@@ -24,6 +24,8 @@ var gameReset = function() {
   this.map = 0;
   this.level = 1;
   this.allEnemies = enemyGenerator();
+  this.allObstacles = obstacleGenerator();
+  this.allItems = [];
   this.player = new Player();
 };
 
@@ -36,6 +38,7 @@ var nextLevel = function() {
       console.log('victory');
     }
   }
+  allObstacles = obstacleGenerator();
   allEnemies = enemyGenerator();
   player.resetPosition();
 };
@@ -53,7 +56,6 @@ var enemyGenerator = function() {
         (col + 1), enemiesMap[row][0], enemiesMap[row][1]
       ];
       enemiesMatrix.push(matrixItem);
-      console.log(matrixItem);
     }
   }
   var enemiesList = [];
@@ -62,13 +64,27 @@ var enemyGenerator = function() {
     var r = Math.floor(Math.random() * enemiesMatrix.length);
     var enemyArray = enemiesMatrix[r];
     enemiesMatrix.splice(r, 1);
-    console.log(r, enemyArray);
     var enemy = new Enemy(
       enemyArray[0], enemyArray[1], (enemyArray[2] * speed)
     );
     enemiesList.push(enemy);
   }
   return enemiesList;
+};
+
+var obstacleGenerator = function() {
+  var obstaclesMap = obstaclesMaps[map];
+  var obstacleList = [];
+  for (var i = 0; i < obstaclesMap.length; i++){
+    var oN = Math.floor(level / obstaclesMap[i][1]);
+    for (var l = 0; l < oN; l++) {
+      var rowObs = obstaclesMap[i][0];
+      var colObs = Math.floor(Math.random() * 5) + 1;
+      var obstacle = new Obstacle(colObs, rowObs);
+      obstacleList.push(obstacle);
+    }
+  }
+  return obstacleList;
 };
 
 var playerListener = function(e) {

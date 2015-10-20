@@ -26,22 +26,22 @@ Player.prototype.handleInput = function(key) {
   if (this.lives > 0) {
     switch (key) {
       case 'up':
-        if (this.y > 0) {
-          this.y += -83;
+          if (this.checkObstacles(0, -83)) {
+            this.y += -83;
         }
         break;
       case 'left':
-        if (this.x >= 101) {
+        if (this.checkObstacles(-101, 0)){
           this.x += -101;
         }
         break;
       case 'right':
-        if (this.x < 404) {
+        if (this.checkObstacles(101, 0)){
           this.x += 101;
         }
         break;
       case 'down':
-        if (this.y < 400) {
+        if (this.checkObstacles(0, 83)) {
           this.y += 83;
         }
         break;
@@ -71,6 +71,33 @@ Player.prototype.checkVictory = function() {
     nextLevel();
   }
 };
+Player.prototype.checkObstacles = function(x, y) {
+  var fX = this.x + x;
+  var fY = this.y + y;
+  var result = true;
+
+  /** Checks bounduaries first */
+  if (fY < -100) {
+    result = false;
+  } else if (fX < 0) {
+    result = false;
+  } else if (fX > 404) {
+    result = false;
+  } else if (fY > 402) {
+    result = false;
+  }
+
+  /** Then checks for obstacles */
+  for (var i = 0; i < allObstacles.length; i++) {
+    var obs = allObstacles[i];
+    if (fX === obs.x)
+      if (fY < obs.y + 50 && fY > obs.y - 50){
+      result = false;
+      break;
+    }
+  }
+  return result;
+};
 Player.prototype.resetPosition = function() {
   this.x = this.startingX;
   this.y = this.startingY;
@@ -90,7 +117,7 @@ var Enemy = function(column, row, speed) {
    */
   this.sprite = 'images/enemy-bug.png';
   this.x = (column * 101);
-  this.y = (row * 70);
+  this.y = (row * 83) - 22;
   this.speed = speed;
 };
 
@@ -106,5 +133,14 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+var Obstacle = function(column, row) {
+  this.x = (column * 101);
+  this.y = (row * 83) - 22;
+  this.sprite = 'images/Rock.png';
+};
+Obstacle.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };

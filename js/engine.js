@@ -163,7 +163,11 @@ var Engine = (function(global) {
             enemy.render();
         });
 
+        allObstacles.forEach(function(obstacle) {
+            obstacle.render();
+        });
         player.render();
+
         for (var i = 0; i < player.lives; i++){
           ctx.drawImage(Resources.get('images/Heart.png'), i * 50 + 5, 42, 50, 70);
         }
@@ -189,7 +193,8 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
-        'images/Heart.png'
+        'images/Heart.png',
+        'images/Rock.png'
     ]);
     Resources.onReady(gameInit);
 
