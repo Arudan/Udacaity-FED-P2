@@ -8,6 +8,8 @@ var Player = function() {
   this.x = this.startingX;
   this.y = this.startingY;
   this.lives = 3;
+  this.livesSprite = 'images/heart.png';
+  this.points = 0;
 };
 Player.prototype.update = function(dt) {
   if (this.lives > 0) {
@@ -18,6 +20,9 @@ Player.prototype.update = function(dt) {
   }
 };
 Player.prototype.render = function() {
+  for (var i = 0; i < this.lives; i++){
+    ctx.drawImage(Resources.get(this.livesSprite), i * 50 + 5, 42, 50, 70);
+  }
   if (this.lives > 0){
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
@@ -120,27 +125,100 @@ var Enemy = function(column, row, speed) {
   this.y = (row * 83) - 22;
   this.speed = speed;
 };
-
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+  // Update the enemy's position, required method for game
+  // Parameter: dt, a time delta between ticks
   this.x += this.speed * dt;
   if (this.x > 606) {
     this.x = -101;
   }
   this.render();
 };
-
-// Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
+  // Draw the enemy on the screen, required method for game
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+/*
+* OBSTACLE CLASS
+*/
 var Obstacle = function(column, row) {
   this.x = (column * 101);
   this.y = (row * 83) - 22;
-  this.sprite = 'images/Rock.png';
+  this.sprite = 'images/rock.png';
 };
 Obstacle.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
+/*
+* ITEM SUPERCLASS
+*/
+var Item = function(column, row) {
+  this.x = (column * 101);
+  this.y = (row * 83) - 22;
+  this.sprite = '';
+};
+Item.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+Item.prototype.onCollision = function() {
+  /** Base onCollision function, overwritten by subclasses.
+  * Left here as a reminder.
+  */
+};
+/**
+* Here I define an inherit function, to be use to create subclasses from item
+*/
+inherit = function(subClass,superClass) {
+   subClass.prototype = Object.create(superClass.prototype); // delegate to prototype
+   subClass.prototype.constructor = subClass; // set constructor on prototype
+};
+/*
+* ITEM SUBCLASSES: HEART
+*/
+var Heart = function(column, row){
+  Item.call(this, column, row);
+  this.sprite = 'images/heart.png';
+};
+inherit(Heart, Item);
+Heart.prototype.onCollision = function() {
+  player.lives++;
+};
+
+/*
+* ITEM SUBCLASSES: GEMS
+*/
+// BASE GEM
+var Gem = function(column, row) {
+  Item.call(this, column, row);
+  this.points = 0;
+};
+inherit(Gem, Item);
+Gem.prototype.onCollision = function() {
+  player.points += this.points;
+};
+
+// GREEN GEM
+var GreenGem = function(column, row) {
+  Gem.call(this, column, row);
+  this.points = 1000;
+  this.sprite = 'images/gem-green.png';
+};
+inherit(GreenGem, Gem);
+
+// BLUE GEM
+var BlueGem = function(column, row) {
+  Gem.call(this, column, row);
+  this.points = 1000;
+  this.sprite = 'images/gem-blue.png';
+};
+inherit(BlueGem, Gem);
+
+// ORANGE GEM
+var OrangeGem = function(column, row) {
+  Gem.call(this, column, row);
+  this.points = 1000;
+  this.sprite = 'images/gem-orange.png';
+};
+inherit(OrangeGem, Gem);
