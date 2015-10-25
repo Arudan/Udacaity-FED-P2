@@ -183,7 +183,11 @@ var Heart = function(column, row){
 };
 inherit(Heart, Item);
 Heart.prototype.onCollision = function() {
-  player.lives++;
+  if (player.lives < 3){
+    player.lives++;
+  } else {
+    this.points = 50;
+  }
 };
 
 /*
@@ -202,7 +206,7 @@ Gem.prototype.onCollision = function() {
 // GREEN GEM
 var GreenGem = function(column, row) {
   Gem.call(this, column, row);
-  this.points = 1000;
+  this.points = 500;
   this.sprite = 'images/gem-green.png';
 };
 inherit(GreenGem, Gem);
@@ -210,7 +214,7 @@ inherit(GreenGem, Gem);
 // BLUE GEM
 var BlueGem = function(column, row) {
   Gem.call(this, column, row);
-  this.points = 1000;
+  this.points = 200;
   this.sprite = 'images/gem-blue.png';
 };
 inherit(BlueGem, Gem);
@@ -218,7 +222,7 @@ inherit(BlueGem, Gem);
 // ORANGE GEM
 var OrangeGem = function(column, row) {
   Gem.call(this, column, row);
-  this.points = 1000;
+  this.points = 100;
   this.sprite = 'images/gem-orange.png';
 };
 inherit(OrangeGem, Gem);
