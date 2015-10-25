@@ -136,8 +136,8 @@ var Engine = (function(global) {
        * and, using the rowImages array, draw the correct image for that
        * portion of the "grid"
        */
-      for (row = 0; row < maps[map].length; row++) {
-        for (col = 0; col < maps[map][row].length; col++) {
+      for (row = 0; row < map.background.length; row++) {
+        for (col = 0; col <  map.background[row].length; col++) {
           /* The drawImage function of the canvas' context element
            * requires 3 parameters: the image to draw, the x coordinate
            * to start drawing and the y coordinate to start drawing.
@@ -145,7 +145,7 @@ var Engine = (function(global) {
            * so that we get the benefits of caching these images, since
            * we're using them over and over.
            */
-          tile = maps[map][row][col];
+          tile =  map.background[row][col];
           ctx.drawImage(Resources.get(rowImages(tile)), col * 101, row * 83);
         }
       }

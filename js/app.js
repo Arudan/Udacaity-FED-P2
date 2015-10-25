@@ -21,8 +21,9 @@ var gameStop = function() {
 
 var gameReset = function() {
   mEngine.stop();
-  this.map = 0;
+  this.mapIndex = 0;
   this.level = 1;
+  this.map = maps[mapIndex];
   this.allEnemies = enemyGenerator();
   this.allObstacles = obstacleGenerator();
   this.allItems = [];
@@ -33,7 +34,8 @@ var nextLevel = function() {
   level++;
   if (level > 10) {
     level = 1;
-    map++;
+    mapIndex++;
+    map = maps[mapIndex];
     if (map > 2) {
       console.log('victory');
     }
@@ -48,12 +50,11 @@ var enemyGenerator = function() {
    * the enemies in the map. We do so to be sure no enemies gets created on top
    * of another
    */
-  var enemiesMap = enemiesMaps[map];
   var enemiesMatrix = [];
-  for (var row = 0; row < enemiesMap.length; row++) {
+  for (var row = 0; row < map.enemies.length; row++) {
     for (var col = 0; col < 5; col++) {
       var matrixItem = [
-        (col + 1), enemiesMap[row][0], enemiesMap[row][1]
+        (col + 1), map.enemies[row][0], map.enemies[row][1]
       ];
       enemiesMatrix.push(matrixItem);
     }
@@ -73,12 +74,11 @@ var enemyGenerator = function() {
 };
 
 var obstacleGenerator = function() {
-  var obstaclesMap = obstaclesMaps[map];
   var obstacleList = [];
-  for (var i = 0; i < obstaclesMap.length; i++){
-    var oN = Math.floor(level / obstaclesMap[i][1]);
+  for (var i = 0; i < map.obstacles.length; i++){
+    var oN = Math.floor(level / map.obstacles[i][1]);
     for (var l = 0; l < oN; l++) {
-      var rowObs = obstaclesMap[i][0];
+      var rowObs = map.obstacles[i][0];
       var colObs = Math.floor(Math.random() * 5) + 1;
       var obstacle = new Obstacle(colObs, rowObs);
       obstacleList.push(obstacle);

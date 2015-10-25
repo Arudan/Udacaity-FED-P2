@@ -1,6 +1,6 @@
-var maps = [
+var maps = [{
   // map 1
-  [
+  'background': [
     ['w', 'w', 'w', 'w', 'w'],
     ['s', 's', 's', 's', 's'],
     ['s', 's', 's', 's', 's'],
@@ -8,8 +8,18 @@ var maps = [
     ['g', 'g', 'g', 'g', 'g'],
     ['g', 'g', 'g', 'g', 'g']
   ],
+  'enemies': [
+    [1, 1.5],
+    [2, 1.25],
+    [3, 1]
+  ],
+  'obstacles': [
+    [4, 4]
+  ],
+  'items': [1, 2, 3]
+}, {
   // map 2
-  [
+  'background': [
     ['w', 'w', 'w', 'w', 'w'],
     ['s', 's', 's', 's', 's'],
     ['g', 'g', 'g', 'g', 'g'],
@@ -17,16 +27,35 @@ var maps = [
     ['s', 's', 's', 's', 's'],
     ['g', 'g', 'g', 'g', 'g']
   ],
+  'enemies': [
+    [1, 2],
+    [3, 1.5],
+    [4, 1.25]
+  ],
+  'obstacles': [
+    [2, 3]
+  ],
+  'items': [1, 3, 4]
+}, {
   // map 3
-  [
+  'background': [
     ['w', 'w', 'w', 'w', 'w'],
     ['g', 'g', 'g', 'g', 'g'],
     ['s', 's', 's', 's', 's'],
     ['g', 'g', 'g', 'g', 'g'],
     ['s', 's', 's', 's', 's'],
     ['g', 'g', 'g', 'g', 'g']
-  ]
-];
+  ],
+  'enemies': [
+    [2, 2.5],
+    [4, 2]
+  ],
+  'obstacles': [
+    [1, 2],
+    [3, 2.5]
+  ],
+  'items': [2, 4]
+}];
 
 /** This array is used to tell the game where to generate enemies on each map.
 * Each array inside the main array rappresents a level, so we shall call them
