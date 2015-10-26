@@ -17,6 +17,7 @@ Player.prototype.update = function(dt) {
     this.checkCollisions();
     this.checkDeath();
     this.checkVictory();
+    this.checkItems();
   }
 };
 Player.prototype.render = function() {
@@ -103,6 +104,21 @@ Player.prototype.checkObstacles = function(x, y) {
   }
   return result;
 };
+Player.prototype.checkItems = function() {
+  for (var i = 0; i < allItems.length; i++) {
+    var item = allItems[i];
+    if (
+      item.visible &&
+      item.x > this.x &&
+      item.x < this.x + 101 &&
+      item.y > this.y &&
+      item.y < this.y + 83
+    ) {
+      item.onCollision();
+      allItems.splice(i, 1);
+    }
+  }
+};
 Player.prototype.resetPosition = function() {
   this.x = this.startingX;
   this.y = this.startingY;
@@ -155,12 +171,27 @@ Obstacle.prototype.render = function() {
 * ITEM SUPERCLASS
 */
 var Item = function(column, row) {
-  this.x = (column * 101);
-  this.y = (row * 83) - 22;
+  this.x = (column * 101) + 25;
+  this.y = (row * 83) + 37;
+  this.sWidth = 50;
+  this.sHeight = 83;
   this.sprite = '';
+  this.visible = false;
+};
+Item.prototype.update = function() {
+  var chance = Math.random() * 10000;
+  if (chance / level <= map.items.chance) {
+    this.visible = true;
+  }
 };
 Item.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  if (this.visible){
+    ctx.drawImage(
+      Resources.get(this.sprite),
+      this.x, this.y,
+      this.sWidth, this.sHeight
+    );
+  }
 };
 Item.prototype.onCollision = function() {
   /** Base onCollision function, overwritten by subclasses.
@@ -180,6 +211,7 @@ inherit = function(subClass,superClass) {
 var Heart = function(column, row){
   Item.call(this, column, row);
   this.sprite = 'images/heart.png';
+  this.y += 10;
 };
 inherit(Heart, Item);
 Heart.prototype.onCollision = function() {

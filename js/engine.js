@@ -100,6 +100,9 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+        allItems.forEach(function(item) {
+            item.update();
+        });
         player.update();
     }
 
@@ -159,13 +162,19 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+        allItems.forEach(function(item){
+          item.render();
+        });
         allEnemies.forEach(function(enemy) {
-            enemy.render();
+          enemy.render();
         });
 
         allObstacles.forEach(function(obstacle) {
-            obstacle.render();
+          obstacle.render();
         });
+
+
+
         player.render();
 
     }

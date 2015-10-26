@@ -1,15 +1,12 @@
 var gameInit = function() {
   gameReset();
-  mEngine.renderBackground();
-  player.render();
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-  ctx.fillRect(0, 50, 505, 537);
-
-  gameStart();
+  baseMenu();
+//  gameStart();
 };
 
 var gameStart = function() {
   ctx.clearRect(0, 0, 505, 606);
+  removeMenuListener();
   addPlayerListener();
   mEngine.init();
 };
@@ -26,8 +23,25 @@ var gameReset = function() {
   this.map = maps[mapIndex];
   this.allEnemies = enemyGenerator();
   this.allObstacles = obstacleGenerator();
-  this.allItems = [];
+  this.allItems = itemGenerator();
   this.player = new Player();
+};
+
+var baseMenu = function() {
+  mEngine.renderBackground();
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  ctx.fillRect(0, 50, 505, 537);
+  ctx.font = '30pt Calibri';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'white';
+  ctx.fillText('Welcome to', 252, 200);
+  ctx.fillText('UDACITY FROGGER', 252, 250);
+  ctx.font = '10pt Calibri';
+  ctx.fillText('by Alberto Francesco Motta', 252, 280);
+  ctx.font = '20pt Calibri';
+  ctx.fillStyle = 'yellow';
+  ctx.fillText('PRESS ENTER TO CONTINUE', 252, 405);
+  addMenuListener();
 };
 
 var nextLevel = function() {
@@ -42,6 +56,7 @@ var nextLevel = function() {
   }
   allObstacles = obstacleGenerator();
   allEnemies = enemyGenerator();
+  allItems = itemGenerator();
   player.resetPosition();
 };
 
@@ -54,7 +69,7 @@ var enemyGenerator = function() {
   for (var row = 0; row < map.enemies.length; row++) {
     for (var col = 0; col < 5; col++) {
       var matrixItem = [
-        (col + 1), map.enemies[row][0], map.enemies[row][1]
+        (col + 1), map.enemies[row].row, map.enemies[row].speed
       ];
       enemiesMatrix.push(matrixItem);
     }
@@ -76,15 +91,39 @@ var enemyGenerator = function() {
 var obstacleGenerator = function() {
   var obstacleList = [];
   for (var i = 0; i < map.obstacles.length; i++){
-    var oN = Math.floor(level / map.obstacles[i][1]);
+    var oN = Math.floor(level / map.obstacles[i].max);
     for (var l = 0; l < oN; l++) {
-      var rowObs = map.obstacles[i][0];
-      var colObs = Math.floor(Math.random() * 5) + 1;
+      var rowObs = map.obstacles[i].row;
+      var colObs = Math.floor(Math.random() * 4) + 1;
       var obstacle = new Obstacle(colObs, rowObs);
       obstacleList.push(obstacle);
     }
   }
   return obstacleList;
+};
+
+var itemGenerator = function() {
+  var itemList = [];
+  for (var i = 0; i < map.items.max; i++) {
+    var colItem = Math.floor(Math.random() * 4) + 1;
+    var rowItem = map.items.rows[Math.floor(Math.random() * map.items.rows.length)];
+    var itemType = Math.floor(Math.random() * 4) + 1;
+    switch (itemType) {
+      case 1:
+        itemList.push(new Heart(colItem, rowItem));
+        break;
+      case 2:
+        itemList.push(new OrangeGem(colItem, rowItem));
+        break;
+      case 3:
+        itemList.push(new BlueGem(colItem, rowItem));
+        break;
+      case 4:
+        itemList.push(new GreenGem(colItem, rowItem));
+        break;
+    }
+  }
+  return itemList;
 };
 
 var playerListener = function(e) {
@@ -115,9 +154,13 @@ var menuListener = function(e) {
   // Player.handleInput() method. You don't need to modify this.
   var allowedKeys = {
     38: 'up',
-    40: 'down'
+    40: 'down',
+    32: 'space'
   };
-  // player.handleInput(allowedKeys[e.keyCode]);
+  console.log(allowedKeys[e.keyCode]);
+  if (allowedKeys[e.keyCode] === 'space') {
+    gameStart();
+  }
 };
 
 var addMenuListener = function() {
