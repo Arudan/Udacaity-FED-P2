@@ -1,7 +1,7 @@
 var gameInit = function() {
   gameReset();
-  baseMenu();
-//  gameStart();
+  addMenuListener();
+  currentMenu.render();
 };
 
 var gameStart = function() {
@@ -25,23 +25,7 @@ var gameReset = function() {
   this.allObstacles = obstacleGenerator();
   this.allItems = itemGenerator();
   this.player = new Player();
-};
-
-var baseMenu = function() {
-  mEngine.renderBackground();
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  ctx.fillRect(0, 50, 505, 537);
-  ctx.font = '30pt Calibri';
-  ctx.textAlign = 'center';
-  ctx.fillStyle = 'white';
-  ctx.fillText('Welcome to', 252, 200);
-  ctx.fillText('UDACITY FROGGER', 252, 250);
-  ctx.font = '10pt Calibri';
-  ctx.fillText('by Alberto Francesco Motta', 252, 280);
-  ctx.font = '20pt Calibri';
-  ctx.fillStyle = 'yellow';
-  ctx.fillText('PRESS ENTER TO CONTINUE', 252, 405);
-  addMenuListener();
+  this.currentMenu = titleMenu;
 };
 
 var nextLevel = function() {
@@ -157,10 +141,7 @@ var menuListener = function(e) {
     40: 'down',
     32: 'space'
   };
-  console.log(allowedKeys[e.keyCode]);
-  if (allowedKeys[e.keyCode] === 'space') {
-    gameStart();
-  }
+  currentMenu.handleInput(allowedKeys[e.keyCode]);
 };
 
 var addMenuListener = function() {

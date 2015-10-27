@@ -170,6 +170,14 @@ Obstacle.prototype.render = function() {
 /*
 * ITEM SUPERCLASS
 */
+/**
+* First I define an inherit function, to be use to create subclasses from Item
+*/
+inherit = function(subClass,superClass) {
+   subClass.prototype = Object.create(superClass.prototype); // delegate to prototype
+   subClass.prototype.constructor = subClass; // set constructor on prototype
+};
+
 var Item = function(column, row) {
   this.x = (column * 101) + 25;
   this.y = (row * 83) + 37;
@@ -193,18 +201,11 @@ Item.prototype.render = function() {
     );
   }
 };
-Item.prototype.onCollision = function() {
-  /** Base onCollision function, overwritten by subclasses.
-  * Left here as a reminder.
-  */
-};
 /**
-* Here I define an inherit function, to be use to create subclasses from item
+* Base onCollision function, must overwritten by subclasses.
 */
-inherit = function(subClass,superClass) {
-   subClass.prototype = Object.create(superClass.prototype); // delegate to prototype
-   subClass.prototype.constructor = subClass; // set constructor on prototype
-};
+Item.prototype.onCollision = function() {};
+
 /*
 * ITEM SUBCLASSES: HEART
 */
