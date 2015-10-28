@@ -27,6 +27,9 @@ Player.prototype.render = function() {
   if (this.lives > 0){
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
+  ctx.textAlign = 'right';
+  ctx.font = '30pt Calibri';
+  ctx.fillText(this.points, 495, 90);
 };
 Player.prototype.handleInput = function(key) {
   if (this.lives > 0) {
