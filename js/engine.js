@@ -203,6 +203,7 @@ var Engine = (function(global) {
         'images/char-horn-girl.png',
         'images/char-pink-girl.png',
         'images/char-princess-girl.png',
+        'images/selector.png',
         'images/heart.png',
         'images/rock.png',
         'images/gem-blue.png',

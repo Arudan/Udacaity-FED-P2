@@ -45,12 +45,12 @@ Menu.prototype.handleInput = function(key) {
       }
       break;
     case 'left':
-      if (!this.verticalMenu && this.menuIndex > 0) {
+      if (! this.verticalMenu && this.menuIndex > 0) {
         this.menuIndex += -1;
       }
       break;
     case 'right':
-      if (!this.verticalMenu && this.menuIndex < this.maxIndex) {
+      if (! this.verticalMenu && this.menuIndex < this.maxIndex) {
         this.menuIndex++;
       }
       break;
@@ -63,6 +63,7 @@ Menu.prototype.handleInput = function(key) {
 * Each object must override the needed methods.
 */
 Menu.prototype.onSpace = function() {};
+
 
 var titleMenu =  new Menu(0, true);
 titleMenu.render = function() {
@@ -89,26 +90,26 @@ mainMenu.render = function(){
   ctx.font = '30pt Calibri';
   ctx.textAlign = 'center';
   ctx.fillStyle = 'white';
-  ctx.fillText('UDACITY FROGGER', 252, 200);
+  ctx.fillText('UDACITY FROGGER', 252, 220);
   ctx.font = '20pt Calibri';
   if (this.menuIndex === 0){
     ctx.fillStyle = 'yellow';
   } else {
     ctx.fillStyle = 'white';
   }
-  ctx.fillText('Start game', 252, 250);
+  ctx.fillText('Start game', 252, 300);
   if (this.menuIndex === 1){
     ctx.fillStyle = 'yellow';
   } else {
     ctx.fillStyle = 'white';
   }
-  ctx.fillText('Select your character', 252, 300);
+  ctx.fillText('Select your character', 252, 340);
   if (this.menuIndex === 2){
     ctx.fillStyle = 'yellow';
   } else {
     ctx.fillStyle = 'white';
   }
-  ctx.fillText('Instructions', 252, 350);
+  ctx.fillText('Instructions', 252, 380);
 };
 mainMenu.onSpace = function(){
   switch (this.menuIndex) {
@@ -129,9 +130,34 @@ mainMenu.onSpace = function(){
 var selectCharMenu = new Menu(5, false);
 selectCharMenu.render = function() {
   this.baseRender();
-  ctx.drawImage(Resources.get('images/char-boy.png'), 0, 250);
-  ctx.drawImage(Resources.get('images/char-cat-girl.png'), 101, 250);
-  ctx.drawImage(Resources.get('images/char-horn-girl.png'), 202, 250);
-  ctx.drawImage(Resources.get('images/char-pink-girl.png'), 303, 250);
-  ctx.drawImage(Resources.get('images/char-princess-girl.png'), 404, 250);
+  ctx.font = '30pt Calibri';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'white';
+  ctx.fillText('Choose your character', 252, 200);
+  ctx.drawImage(Resources.get('images/selector.png'), (this.menuIndex * 101), 210);
+  ctx.drawImage(Resources.get('images/char-boy.png'), 0, 200);
+  ctx.drawImage(Resources.get('images/char-cat-girl.png'), 101, 200);
+  ctx.drawImage(Resources.get('images/char-horn-girl.png'), 202, 200);
+  ctx.drawImage(Resources.get('images/char-pink-girl.png'), 303, 200);
+  ctx.drawImage(Resources.get('images/char-princess-girl.png'), 404, 200);
+};
+selectCharMenu.onSpace = function(){
+  switch (this.menuIndex){
+    case 0:
+      player.sprite = 'images/char-boy.png';
+      break;
+    case 1:
+      player.sprite = 'images/char-cat-girl.png';
+      break;
+    case 2:
+      player.sprite = 'images/char-horn-girl.png';
+      break;
+    case 3:
+      player.sprite = 'images/char-horn-girl.png';
+      break;
+    case 4:
+      player.sprite = 'images/char-princess-girl.png';
+      break;
+  }
+  currentMenu = mainMenu;
 };
