@@ -1,24 +1,36 @@
-/*
+/**
 * PLAYER CLASS
+* Class use for the player character.
+* It takes no parameter. It sets the sprite to a default, and the initial
+* position.
 */
 var Player = function() {
+  // Default sprite, used in render method
   this.sprite = 'images/char-boy.png';
+  // Starting coordinates, to be used for initial positioning and resets
   this.startingX = 202;
   this.startingY = 402;
+  // Initial positioning
   this.x = this.startingX;
   this.y = this.startingY;
+  // Initial lives
   this.lives = 3;
+  // Sprite used in render method to rappresent lives
   this.livesSprite = 'images/heart.png';
-  this.points = 0;
+  // Initial score
+  this.score = 0;
 };
+
+/**
+*
+*/
 Player.prototype.update = function(dt) {
-  if (this.lives > 0) {
-    this.render();
-    this.checkCollisions();
-    this.checkDeath();
-    this.checkVictory();
-    this.checkItems();
-  }
+
+  this.checkCollisions();
+  this.checkDeath();
+  this.checkVictory();
+  this.checkItems();
+  this.render();
 };
 Player.prototype.render = function() {
   for (var i = 0; i < this.lives; i++){
@@ -29,7 +41,7 @@ Player.prototype.render = function() {
   }
   ctx.textAlign = 'right';
   ctx.font = '30pt Calibri';
-  ctx.fillText(this.points, 495, 90);
+  ctx.fillText(this.score, 495, 90);
 };
 Player.prototype.handleInput = function(key) {
   if (this.lives > 0) {
@@ -222,7 +234,7 @@ Heart.prototype.onCollision = function() {
   if (player.lives < 3){
     player.lives++;
   } else {
-    this.points = 50;
+    player.score += 50;
   }
 };
 
@@ -232,17 +244,17 @@ Heart.prototype.onCollision = function() {
 // BASE GEM
 var Gem = function(column, row) {
   Item.call(this, column, row);
-  this.points = 0;
+  this.score = 0;
 };
 inherit(Gem, Item);
 Gem.prototype.onCollision = function() {
-  player.points += this.points;
+  player.score += this.score;
 };
 
 // GREEN GEM
 var GreenGem = function(column, row) {
   Gem.call(this, column, row);
-  this.points = 500;
+  this.score = 500;
   this.sprite = 'images/gem-green.png';
 };
 inherit(GreenGem, Gem);
@@ -250,7 +262,7 @@ inherit(GreenGem, Gem);
 // BLUE GEM
 var BlueGem = function(column, row) {
   Gem.call(this, column, row);
-  this.points = 200;
+  this.score = 200;
   this.sprite = 'images/gem-blue.png';
 };
 inherit(BlueGem, Gem);
@@ -258,7 +270,7 @@ inherit(BlueGem, Gem);
 // ORANGE GEM
 var OrangeGem = function(column, row) {
   Gem.call(this, column, row);
-  this.points = 100;
+  this.score = 100;
   this.sprite = 'images/gem-orange.png';
 };
 inherit(OrangeGem, Gem);
