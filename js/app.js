@@ -17,7 +17,7 @@ var gameStop = function() {
 };
 
 var gameReset = function() {
-  mEngine.stop();
+  gameStop();
   this.mapIndex = 0;
   this.level = 1;
   this.map = maps[mapIndex];
@@ -29,6 +29,7 @@ var gameReset = function() {
 };
 
 var nextLevel = function() {
+  ctx.clearRect(0, 0, 505, 606);
   level++;
   if (level > 10) {
     level = 1;

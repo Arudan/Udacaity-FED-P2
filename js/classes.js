@@ -77,6 +77,7 @@ Player.prototype.checkDeath = function() {
 };
 Player.prototype.checkVictory = function() {
   if (this.y < 50) {
+    this.points += (mapIndex + 1)  * level * 5;
     nextLevel();
   }
 };
@@ -222,7 +223,7 @@ Heart.prototype.onCollision = function() {
   if (player.lives < 3){
     player.lives++;
   } else {
-    this.points = 50;
+    player.points += 50;
   }
 };
 

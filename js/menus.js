@@ -68,14 +68,14 @@ Menu.prototype.onSpace = function() {};
 var titleMenu =  new Menu(0, true);
 titleMenu.render = function() {
     this.baseRender();
-    ctx.font = '30pt Calibri';
+    ctx.font = '40pt Calibri';
     ctx.textAlign = 'center';
     ctx.fillStyle = 'white';
     ctx.fillText('Welcome to', 252, 200);
     ctx.fillText('UDACITY FROGGER', 252, 250);
-    ctx.font = '10pt Calibri';
-    ctx.fillText('by Alberto Francesco Motta', 252, 280);
     ctx.font = '20pt Calibri';
+    ctx.fillText('by Alberto Francesco Motta', 252, 280);
+    ctx.font = '30pt Calibri';
     ctx.fillStyle = 'yellow';
     ctx.fillText('PRESS SPACE TO CONTINUE', 252, 405);
 };
@@ -87,11 +87,11 @@ titleMenu.onSpace = function() {
 var mainMenu = new Menu(3, true);
 mainMenu.render = function(){
   this.baseRender();
-  ctx.font = '30pt Calibri';
+  ctx.font = '40pt Calibri';
   ctx.textAlign = 'center';
   ctx.fillStyle = 'white';
   ctx.fillText('UDACITY FROGGER', 252, 220);
-  ctx.font = '20pt Calibri';
+  ctx.font = '30pt Calibri';
   if (this.menuIndex === 0){
     ctx.fillStyle = 'yellow';
   } else {
@@ -110,6 +110,10 @@ mainMenu.render = function(){
     ctx.fillStyle = 'white';
   }
   ctx.fillText('Instructions', 252, 380);
+  ctx.fillStyle = 'white';
+  ctx.font = '20pt Calibri';
+  ctx.fillText('Use the arrows up and down to select', 252, 450);
+  ctx.fillText('and the space bar to confirm', 252, 480);
 };
 mainMenu.onSpace = function(){
   switch (this.menuIndex) {
@@ -160,4 +164,29 @@ selectCharMenu.onSpace = function(){
       break;
   }
   currentMenu = mainMenu;
+};
+
+var instructionsMenu = new Menu(0, true);
+instructionsMenu.render = function(){
+  this.baseRender();
+  ctx.font = '40pt Calibri';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'white';
+  ctx.fillText('UDACITY FROGGER', 252, 140);
+  ctx.fillText('Instructions', 252, 200);
+  ctx.font = '20pt Calibri';
+  ctx.fillText('Your goal is to reach the water', 252, 250);
+  ctx.fillText('Use the arrows to move', 252, 280);
+  ctx.fillText('up, down, left and right', 252, 310);
+  ctx.fillText('Avoid the evil ladybugs and the obstacles', 252, 340);
+  ctx.fillText('Collect gems to improve your score', 252, 370);
+  ctx.fillText('Collect hearts to recover your health', 252, 400);
+  ctx.fillStyle = 'white';
+  ctx.font = '20pt Calibri';
+  ctx.fillStyle = 'yellow';
+  ctx.fillText('Press space bar to go back', 252, 480);
+};
+instructionsMenu.onSpace = function() {
+  currentMenu = mainMenu;
+  currentMenu.render();
 };
