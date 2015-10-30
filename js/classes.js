@@ -22,54 +22,28 @@ var Player = function() {
 };
 
 /**
-*
+* The update function handles the update of the player.
+* It has been divided into four methods, checking collisions with enemies, items
+* and if the player is alive of victorious.
 */
 Player.prototype.update = function(dt) {
-
-  this.checkCollisions();
   this.checkDeath();
   this.checkVictory();
+  this.checkEnemies();
   this.checkItems();
-  this.render();
 };
-Player.prototype.render = function() {
-  for (var i = 0; i < this.lives; i++){
-    ctx.drawImage(Resources.get(this.livesSprite), i * 50 + 5, 42, 50, 70);
-  }
-  if (this.lives > 0){
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  }
-  ctx.textAlign = 'right';
-  ctx.font = '30pt Calibri';
-  ctx.fillText(this.score, 495, 90);
-};
-Player.prototype.handleInput = function(key) {
-  if (this.lives > 0) {
-    switch (key) {
-      case 'up':
-          if (this.checkObstacles(0, -83)) {
-            this.y += -83;
-        }
-        break;
-      case 'left':
-        if (this.checkObstacles(-101, 0)){
-          this.x += -101;
-        }
-        break;
-      case 'right':
-        if (this.checkObstacles(101, 0)){
-          this.x += 101;
-        }
-        break;
-      case 'down':
-        if (this.checkObstacles(0, 83)) {
-          this.y += 83;
-        }
-        break;
-    }
+Player.prototype.checkDeath = function() {
+  if (this.lives <= 0){
+    gameInit();
   }
 };
-Player.prototype.checkCollisions = function() {
+Player.prototype.checkVictory = function() {
+  if (this.y < 50) {
+    this.score += (mapIndex + 1) * level * 5;
+    nextLevel();
+  }
+};
+Player.prototype.checkEnemies = function() {
   for (var i = 0; i < allEnemies.length; i++) {
     var en = allEnemies[i];
     if (
@@ -82,17 +56,79 @@ Player.prototype.checkCollisions = function() {
     }
   }
 };
-Player.prototype.checkDeath = function() {
-  if (this.lives <= 0){
-    gameInit();
+Player.prototype.checkItems = function() {
+  for (var i = 0; i < allItems.length; i++) {
+    var item = allItems[i];
+    if (
+      item.visible &&
+      item.x > this.x &&
+      item.x < this.x + 101 &&
+      item.y > this.y &&
+      item.y < this.y + 83
+    ) {
+      item.onCollision();
+      allItems.splice(i, 1);
+    }
   }
 };
-Player.prototype.checkVictory = function() {
-  if (this.y < 50) {
-    this.points += (mapIndex + 1)  * level * 5;
-    nextLevel();
+/**
+* The render function handles the rendering of the character sprite and also of
+* the lives counter and the score counter.
+*/
+Player.prototype.render = function() {
+  // Render lives counter
+  for (var i = 0; i < this.lives; i++){
+    ctx.drawImage(Resources.get(this.livesSprite), i * 50 + 5, 42, 50, 70);
+  }
+  // Render score counter
+  ctx.textAlign = 'right';
+  ctx.font = '30pt Calibri';
+  ctx.fillText(this.score, 495, 90);
+  // Render player sprite
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+/** @function handleInput
+* The handleInput is called by the playerListener function in app.js and is used
+* as a callback to keystrokes.
+* It updates the position of the player, after checking if the move is legal
+* through the checkObstacles function. The checkObstacles gets called with the
+* delta from the current position which the player would hava after the move and
+* returns a boolean to signify if the move is allowed.
+* @param {string} key - the pressed key's name
+*/
+Player.prototype.handleInput = function(key) {
+  switch (key) {
+    // Move the player up, if possible
+    case 'up':
+      if (this.checkObstacles(0, -83)) {
+        this.y += -83;
+      }
+      break;
+    // Move the player left, if possible
+    case 'left':
+      if (this.checkObstacles(-101, 0)){
+        this.x += -101;
+      }
+      break;
+    // Move the player right, if possible
+    case 'right':
+      if (this.checkObstacles(101, 0)){
+        this.x += 101;
+      }
+      break;
+    // Move the player down, if possible
+    case 'down':
+      if (this.checkObstacles(0, 83)) {
+        this.y += 83;
+      }
+      break;
   }
 };
+/** @function checkObstacles
+*
+* @param x - delta from player.x
+* @param y -delta from player.y
+*/
 Player.prototype.checkObstacles = function(x, y) {
   var fX = this.x + x;
   var fY = this.y + y;
@@ -119,21 +155,6 @@ Player.prototype.checkObstacles = function(x, y) {
     }
   }
   return result;
-};
-Player.prototype.checkItems = function() {
-  for (var i = 0; i < allItems.length; i++) {
-    var item = allItems[i];
-    if (
-      item.visible &&
-      item.x > this.x &&
-      item.x < this.x + 101 &&
-      item.y > this.y &&
-      item.y < this.y + 83
-    ) {
-      item.onCollision();
-      allItems.splice(i, 1);
-    }
-  }
 };
 Player.prototype.resetPosition = function() {
   this.x = this.startingX;
@@ -164,7 +185,6 @@ Enemy.prototype.update = function(dt) {
   if (this.x > 606) {
     this.x = -101;
   }
-  this.render();
 };
 Enemy.prototype.render = function() {
   // Draw the enemy on the screen, required method for game

@@ -173,8 +173,6 @@ var Engine = (function(global) {
           obstacle.render();
         });
 
-
-
         player.render();
 
     }
