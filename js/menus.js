@@ -24,7 +24,7 @@ Menu.prototype.baseRender = function(){
 Menu.prototype.render = function() {
   this.baseRender();
 };
-/**
+/** @function handleInput
 * This function handles the keyboard inputs given to the menu.
 * It uses separated functions for each allowed key, so that inheritors can
 * override just the necessary ones.
@@ -57,7 +57,7 @@ Menu.prototype.handleInput = function(key) {
   }
   currentMenu.render();
 };
-/**
+/** @function onSpace
 * This function handle the single allowed input key.
 * In the class it does nothing.
 * Each object must override the needed methods.
@@ -189,4 +189,13 @@ instructionsMenu.render = function(){
 instructionsMenu.onSpace = function() {
   currentMenu = mainMenu;
   currentMenu.render();
+};
+
+endGameMenu = new Menu(0, true);
+endGameMenu.render = function() {
+  this.baseRender();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'white';
+
+  ctx.fillText('UDACITY FROGGER', 252, 140);
 };
