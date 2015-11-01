@@ -1,7 +1,7 @@
 /** Maps.js
 * This file contains the definition of the maps for the game.
 * Maps are contained inside the maps Array.
-* Each map is an object, containing four arrays: background, enemies, obstacles
+* Each map is an object, containing four properties background, enemies, obstacles
 * and items.
 *
 * The background array is used to instruct the engine on what background draw on
@@ -20,6 +20,11 @@
 * appear. Each rowArray has two property. The first, row, is used to identify
 * the row, the second, 'max' is used to determin how many obstacles must be
 * renderer at a specific level, using the formula Math.floor(level/rowArray[1]).
+*
+* The 'items' object is used to instruct the game on the generations of items.
+* The number property sets the max number of items per level. Rows array sets on
+* which rows the items can be displayed. Chance is used as a coefficient for
+* visibility change.
 */
 var maps = [{
   // map 1
@@ -52,7 +57,7 @@ var maps = [{
     }
   ],
   items: {
-    max: 1,
+    number: 1,
     rows: [1, 2, 3],
     chance: 10
   }
@@ -87,7 +92,7 @@ var maps = [{
     }
   ],
   items: {
-    max: 1,
+    number: 1,
     rows: [1, 3, 4],
     chance: 10
   }
@@ -122,7 +127,7 @@ var maps = [{
     }
   ],
   items: {
-    max: 1,
+    number: 1,
     rows: [2, 4],
     chance: 10
   }
