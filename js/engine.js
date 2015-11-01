@@ -205,9 +205,9 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
      /* This object defines the publicly accessible functions available to
-      * developers by creating a global Resources object.
+      * developers by creating a global Throttle object.
       */
-    window.mEngine = {
+    window.Throttle = {
        init: init,
        renderBackground: renderBackground,
        stop: stop

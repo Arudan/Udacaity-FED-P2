@@ -8,12 +8,12 @@ var gameStart = function() {
   ctx.clearRect(0, 0, 505, 606);
   removeMenuListener();
   addPlayerListener();
-  mEngine.init();
+  Throttle.init();
 };
 
 var gameStop = function() {
   removePlayerListener();
-  mEngine.stop();
+  Throttle.stop();
 };
 
 var gameReset = function() {

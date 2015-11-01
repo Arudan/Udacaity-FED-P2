@@ -1,7 +1,6 @@
-/**
-* PLAYER CLASS
-* Class use for the player character.
-* It takes no parameter. It sets the sprite to a default, and the initial
+/**@class Player
+* Class used for the player character.
+* It takes no parameter. It sets the sprite to a default and the initial
 * position.
 */
 var Player = function() {
@@ -32,46 +31,71 @@ Player.prototype.update = function(dt) {
   this.checkEnemies();
   this.checkItems();
 };
+/** @function checkDeath
+* if player.lives is 0 or less, you have lost.
+* the game restarts from the beginning.
+*/
 Player.prototype.checkDeath = function() {
   if (this.lives <= 0){
     gameInit();
   }
 };
+/** @function checkVictory
+* If the player reaches the water, he has won the level.
+* Calls the nextLevel function and increses the player score.
+*/
 Player.prototype.checkVictory = function() {
   if (this.y < 50) {
     this.score += (mapIndex + 1) * level * 5;
     nextLevel();
   }
 };
+/** @function checkEnemies
+* For each enemy in allEnemies, checks if it collides with the player.
+* In case, the player looses a life and goes back to the starting point.
+*/
 Player.prototype.checkEnemies = function() {
   for (var i = 0; i < allEnemies.length; i++) {
     var en = allEnemies[i];
+    // If the player collides with an enemy
     if (
-      (en.x < this.x && this.x < (en.x + 80) ||
-        en.x < this.x + 80 && this.x < en.x) &&
-      (en.y - 30 <= this.y && this.y <= en.y + 30)
+      // First checks on the y axis
+      (this.y >= en.y - 30 && this.y <= en.y + 30) &&
+      // Then of the x axis
+      (this.x > en.x && this.x < (en.x + 70) ||
+        this.x > en.x + 70 && this.x < en.x)
     ) {
+      // loses 1 life
       this.lives -= 1;
+      // goes back to the starting point
       this.resetPosition();
     }
   }
 };
+/** @function checkItems
+* For each item in allItems, this function verifies if the player collides
+* with a visible one
+*/
 Player.prototype.checkItems = function() {
   for (var i = 0; i < allItems.length; i++) {
     var item = allItems[i];
     if (
+      // First of all, the Item must be visible
       item.visible &&
+      // Then verifies the eventual collision
       item.x > this.x &&
       item.x < this.x + 101 &&
       item.y > this.y &&
       item.y < this.y + 83
     ) {
+      // In case of collision, the Item onCollision function gets called.
       item.onCollision();
+      // Afterwards, the Item is removed from the allItems array.
       allItems.splice(i, 1);
     }
   }
 };
-/**
+/** @function render
 * The render function handles the rendering of the character sprite and also of
 * the lives counter and the score counter.
 */
@@ -125,7 +149,8 @@ Player.prototype.handleInput = function(key) {
   }
 };
 /** @function checkObstacles
-*
+* Check if the movement to be performed is legal. It checks if the player would
+* end outside of bounduaries or against an obstacle. It returns a boolean.
 * @param x - delta from player.x
 * @param y -delta from player.y
 */
@@ -156,6 +181,9 @@ Player.prototype.checkObstacles = function(x, y) {
   }
   return result;
 };
+/** @function resetPosition
+* Sets player coordinates to the starting point
+*/
 Player.prototype.resetPosition = function() {
   this.x = this.startingX;
   this.y = this.startingY;
@@ -164,41 +192,57 @@ Player.prototype.resetPosition = function() {
 /*
 * ENEMY CLASS
 */
+/** @class Enemy
+* Class function for the enemies, using the pseudoclassical model
+* Takes three parameters, column, row and speed;
+* @param column: determins the position on the x axis;  It's an integer number
+* which gets multiplied by the number of pixel of the column width
+* @param row: integer number. It is used to determin the position on the y
+* axis, by multipling the number for the ixel height of the row.
+* @param speed: coefficient used to determin the enemy speed inside the update
+* method
+*/
 var Enemy = function(column, row, speed) {
-  /*
-   * Class function for the enemies, using the pseudoclassical model
-   * Takes three parameters, y, x and speed;
-   * y is an integer number between 1 and 3. It is used to determin the
-   * position on the y axis, as enemies can only be in row 1 to 3.
-   * x determins the position on the x axis; It's an integer number which gets
-   * multiplied by the number of pixel of the sprite width
-   */
   this.sprite = 'images/enemy-bug.png';
   this.x = (column * 101);
   this.y = (row * 83) - 22;
   this.speed = speed;
 };
+/** @function update
+* Update the enemy's position. It determins the x position by multipling dt by
+* speed attribute.
+* If the enemy reaches the right bounduary, it resets its position to the left.
+@param dt, a time delta between ticks
+*/
 Enemy.prototype.update = function(dt) {
-  // Update the enemy's position, required method for game
-  // Parameter: dt, a time delta between ticks
   this.x += this.speed * dt;
+  // If it's outside of the canvas, move it to the left.
   if (this.x > 606) {
     this.x = -101;
   }
 };
+/** @function render
+* Draw the enemy sprite on the screen
+*/
 Enemy.prototype.render = function() {
-  // Draw the enemy on the screen, required method for game
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-/*
-* OBSTACLE CLASS
+/** @class Obstacle
+* Class used to rappresent Obstacles on screen.
+* @param column: determins the position on the x axis;  It's an integer number
+* which gets multiplied by the number of pixel of the column width
+* @param row: integer number. It is used to determin the position on the y
+* axis, by multipling the number for the ixel height of the row.
 */
 var Obstacle = function(column, row) {
   this.x = (column * 101);
   this.y = (row * 83) - 22;
   this.sprite = 'images/rock.png';
 };
+/** @function render
+* Renders the Obstacle sprite on the canvas
+*/
 Obstacle.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
@@ -206,14 +250,17 @@ Obstacle.prototype.render = function() {
 /*
 * ITEM SUPERCLASS
 */
-/**
-* First I define an inherit function, to be use to create subclasses from Item
+/** @function inherit
+* An inherit function, used to create subclasses from Item
 */
 inherit = function(subClass,superClass) {
    subClass.prototype = Object.create(superClass.prototype); // delegate to prototype
    subClass.prototype.constructor = subClass; // set constructor on prototype
 };
 
+/** @class Item
+*
+*/
 var Item = function(column, row) {
   this.x = (column * 101) + 25;
   this.y = (row * 83) + 37;
