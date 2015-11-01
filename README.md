@@ -1,6 +1,29 @@
-frontend-nanodegree-arcade-game
-===============================
+Project 3: Arcade Game
+======================
+This project is part of the Front-end developer nanodegree @ Udacity.
+I was provided with visual assets and a game loop engine.
+I decided to slightly tweek the Engine to have more control of it.
+In the classes.js I defined the class for the game.
+In the menus.js are defined the various game menus.
+The maps.js contains the instructions for the Engine on how to render levels and
+maps.
+In the app.js are defined the game functions.
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
+Author
+======
+Alberto Francesco Motta
 
-for self-checking their submission.
+How to run the game:
+===================
+Download the whole repository and load index.html to run the game or use a
+Python SimpleHTTPServer (python -m SimpleHTTPServer 8000) and visit the url
+localhost:8000.
+
+How to play
+===========
+- Follow on screen instructions.
+- Use the arrow keys to move the player.
+- Avoid enemies and obstacles.
+- Try to reach the water to finish the level.
+- Collect items to score more points.
+- Enjoy yourself.

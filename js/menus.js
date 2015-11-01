@@ -13,7 +13,7 @@ var Menu = function(maxIndex, verticalMenu){
 */
 Menu.prototype.baseRender = function(){
   ctx.clearRect(0, 0, 505, 606);
-  mEngine.renderBackground();
+  Throttle.renderBackground();
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
   ctx.fillRect(0, 50, 505, 537);
 };
@@ -64,7 +64,9 @@ Menu.prototype.handleInput = function(key) {
 */
 Menu.prototype.onSpace = function() {};
 
-
+/**
+* Introduction screen
+*/
 var titleMenu =  new Menu(0, true);
 titleMenu.render = function() {
     this.baseRender();
@@ -80,10 +82,14 @@ titleMenu.render = function() {
     ctx.fillText('PRESS SPACE TO CONTINUE', 252, 405);
 };
 titleMenu.onSpace = function() {
+  // renders mainMenu
   currentMenu = mainMenu;
   currentMenu.render();
 };
 
+/**
+* The main game menu
+*/
 var mainMenu = new Menu(3, true);
 mainMenu.render = function(){
   this.baseRender();
@@ -131,6 +137,9 @@ mainMenu.onSpace = function(){
   }
 };
 
+/**
+* With this menu is possible to set the character sprite
+*/
 var selectCharMenu = new Menu(5, false);
 selectCharMenu.render = function() {
   this.baseRender();
@@ -196,6 +205,13 @@ endGameMenu.render = function() {
   this.baseRender();
   ctx.textAlign = 'center';
   ctx.fillStyle = 'white';
-
-  ctx.fillText('UDACITY FROGGER', 252, 140);
+  ctx.fillText('CONGRATULATION', 252, 140);
+  ctx.fillText('YOU HAVE FINISHED', 252, 190);
+  ctx.fillText('THE GAME', 252, 240);
+  ctx.fillText('SCORE:', 252, 340);
+  ctx.fillText(player.score, 252, 390);
+};
+endGameMenu.onSpace = function() {
+  currentMenu = mainMenu;
+  currentMenu.render();
 };

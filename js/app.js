@@ -61,9 +61,10 @@ var nextLevel = function() {
     level = 1;
     mapIndex++;
     map = maps[mapIndex];
-    if (map > maps.length) {
-      //TODO: set endgame menu
-      console.log('victory');
+    if (mapIndex >= maps.length) {
+      gameStop();
+      currentMenu = endGameMenu;
+      currentMenu.render();
     }
   }
   // Sets all variables
