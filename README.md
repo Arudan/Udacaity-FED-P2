@@ -15,9 +15,11 @@ Alberto Francesco Motta
 
 How to run the game:
 ===================
-Download the whole repository and load index.html to run the game or use a
-Python SimpleHTTPServer (python -m SimpleHTTPServer 8000) and visit the url
-localhost:8000.
+You can play by:
+- visiting the page http://arudan.github.io/Udacity-FED-P3
+- downloading the whole repository and loading the index.html
+- use a Python SimpleHTTPServer (python -m SimpleHTTPServer 8000) and visit the url
+localhost:8000
 
 How to play
 ===========
