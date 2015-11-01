@@ -259,22 +259,36 @@ inherit = function(subClass,superClass) {
 };
 
 /** @class Item
-*
+* A superclass used to rappresent collectible items.
+* @param column: determins the position on the x axis;  It's an integer number
+* which gets multiplied by the number of pixel of the column width
+* @param row: integer number. It is used to determin the position on the y
+* axis, by multipling the number for the ixel height of the row.
 */
 var Item = function(column, row) {
   this.x = (column * 101) + 25;
   this.y = (row * 83) + 37;
+  // Size of the sprite
   this.sWidth = 50;
   this.sHeight = 83;
   this.sprite = '';
+  // While not visible, items don't get drawn on canvas and are ignored by
+  // collisions
   this.visible = false;
 };
+/** @function update
+* Handles the chances of an item turning visible, based on the chance param of
+* the map
+*/
 Item.prototype.update = function() {
   var chance = Math.random() * 10000;
   if (chance / level <= map.items.chance) {
     this.visible = true;
   }
 };
+/** @function render
+* Used to draw the item of the canvas, if visible
+*/
 Item.prototype.render = function() {
   if (this.visible){
     ctx.drawImage(
@@ -284,7 +298,7 @@ Item.prototype.render = function() {
     );
   }
 };
-/**
+/** @function onCollision
 * Base onCollision function, must overwritten by subclasses.
 */
 Item.prototype.onCollision = function() {};
@@ -292,12 +306,20 @@ Item.prototype.onCollision = function() {};
 /*
 * ITEM SUBCLASSES: HEART
 */
+/** @class Heart
+* subclass of Item
+*/
 var Heart = function(column, row){
   Item.call(this, column, row);
   this.sprite = 'images/heart.png';
   this.y += 10;
 };
 inherit(Heart, Item);
+/** @function onCollision
+* Overrides Item onCollision.
+* Increses the lives of the player, up to 3. If player already has 3 lives,
+* increses its score by 50.
+*/
 Heart.prototype.onCollision = function() {
   if (player.lives < 3){
     player.lives++;
@@ -310,16 +332,26 @@ Heart.prototype.onCollision = function() {
 * ITEM SUBCLASSES: GEMS
 */
 // BASE GEM
+/** @class Gem
+* subclass of Item, adds the score attribute.
+*/
 var Gem = function(column, row) {
   Item.call(this, column, row);
   this.score = 0;
 };
 inherit(Gem, Item);
+
+/** @function onCollision
+* Overrides Item onCollision.
+* Increses player's score by score attribute.
+*/
 Gem.prototype.onCollision = function() {
   player.score += this.score;
 };
 
-// GREEN GEM
+/** @class GreenGem
+* subclass of Gem, overrides the score attribute.
+*/
 var GreenGem = function(column, row) {
   Gem.call(this, column, row);
   this.score = 500;
@@ -327,7 +359,9 @@ var GreenGem = function(column, row) {
 };
 inherit(GreenGem, Gem);
 
-// BLUE GEM
+/** @class BlueGem
+* subclass of Gem, overrides the score attribute.
+*/
 var BlueGem = function(column, row) {
   Gem.call(this, column, row);
   this.score = 200;
@@ -335,7 +369,9 @@ var BlueGem = function(column, row) {
 };
 inherit(BlueGem, Gem);
 
-// ORANGE GEM
+/** @class OrangeGem
+* subclass of Gem, overrides the score attribute.
+*/
 var OrangeGem = function(column, row) {
   Gem.call(this, column, row);
   this.score = 100;
